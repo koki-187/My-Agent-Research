@@ -34,6 +34,9 @@ jobs:
       
       - name: Commit and Push changes
         run: |
+          # 注意: git add . は全てのファイルを追加します
+          # 実際の使用時は、.gitignore が正しく設定されていることを確認してください
+          # または、特定のファイルやパターンのみを追加することを検討してください
           git add .
           if git diff --staged --quiet; then
             echo "No changes to commit"
