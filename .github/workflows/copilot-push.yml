@@ -1,0 +1,48 @@
+name: Copilot Auto Push
+
+on:
+  workflow_dispatch:
+    inputs:
+      commit_message:
+        description: 'Commit message'
+        required: true
+        default: 'Update from ChatGPT/Copilot'
+      branch:
+        description: 'Target branch'
+        required: false
+        default: 'main'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  auto-commit:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+      
+      - name: Commit and Push changes
+        run: |
+          # 注意: git add . は全てのファイルを追加します
+          # 実際の使用時は、.gitignore が正しく設定されていることを確認してください
+          # または、特定のファイルやパターンのみを追加することを検討してください
+          git add .
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+            echo "status=no-changes" >> $GITHUB_OUTPUT
+          else
+            git commit -m "${{ github.event.inputs.commit_message }}"
+            git push origin ${{ github.event.inputs.branch }}
+            echo "status=success" >> $GITHUB_OUTPUT
+          fi
