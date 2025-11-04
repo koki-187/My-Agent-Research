@@ -28,6 +28,8 @@ if (!apiKey.startsWith('sk-')) {
 }
 
 // キーの一部を隠して表示（セキュリティのため）
+// Note: Only a masked version is logged (first 7 + last 4 chars), which is safe
+// and commonly used for configuration validation. The full key is never logged.
 const keyLength = apiKey.length;
 const maskedKey = `${apiKey.substring(0, 7)}...${apiKey.substring(keyLength - 4)}`;
 console.log(`✓ OPENAI_API_KEY is configured: ${maskedKey}`);
