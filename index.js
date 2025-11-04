@@ -6,7 +6,7 @@
  * 基本的な実装例を示しています。
  */
 
-const OpenAI = require('openai').default || require('openai');
+const { OpenAI } = require('openai');
 
 // process.env.OPENAI_API_KEYから環境変数を読み込む
 const openai = new OpenAI({

@@ -40,7 +40,7 @@ console.log('The OPENAI_API_KEY environment variable is properly configured.\n')
 async function testConnection() {
   try {
     // OpenAI SDKがインストールされている場合のみテスト
-    const { OpenAI } = await import('openai');
+    const { OpenAI } = require('openai');
     
     const openai = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY,
@@ -54,7 +54,7 @@ async function testConnection() {
     console.log(`✓ Available models count: ${models.data.length}\n`);
     
   } catch (error) {
-    if (error.code === 'ERR_MODULE_NOT_FOUND') {
+    if (error.code === 'MODULE_NOT_FOUND') {
       console.log('Note: OpenAI SDK not installed. Run "npm install" to enable API connection test.\n');
     } else {
       console.error('❌ API Connection Error:', error.message);
