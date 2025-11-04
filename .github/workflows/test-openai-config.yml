@@ -1,0 +1,52 @@
+name: Test OpenAI API Configuration
+
+# このワークフローはOpenAI APIキーの設定をテストします
+# MALAPI または MYAGENTRESEARCH_API シークレットが OPENAI_API_KEY にマッピングされていることを検証
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - 'copilot/**'
+    paths:
+      - 'examples/test-openai-connection.js'
+      - '.github/workflows/test-openai-config.yml'
+      - 'package.json'
+
+permissions:
+  contents: read
+
+jobs:
+  test-api-config:
+    runs-on: ubuntu-latest
+    
+    env:
+      OPENAI_API_KEY: ${{ secrets.MALAPI || secrets.MYAGENTRESEARCH_API }}
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Test OPENAI_API_KEY configuration
+        run: |
+          echo "Testing OPENAI_API_KEY environment variable configuration..."
+          npm test
+      
+      - name: Verify environment variable mapping
+        run: |
+          if [ -z "$OPENAI_API_KEY" ]; then
+            echo "❌ Error: OPENAI_API_KEY is not set"
+            echo "Please ensure MALAPI or MYAGENTRESEARCH_API secret is configured in repository settings"
+            exit 1
+          else
+            echo "✓ OPENAI_API_KEY environment variable is properly configured"
+          fi

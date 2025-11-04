@@ -1,0 +1,19 @@
+{
+  "name": "my-agent-research",
+  "version": "1.0.0",
+  "description": "人物リサーチ機能 - Character Research Functionality",
+  "main": "index.js",
+  "scripts": {
+    "test": "node examples/test-openai-connection.js"
+  },
+  "keywords": [
+    "research",
+    "agent",
+    "openai"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "openai": "^4.20.0"
+  }
+}

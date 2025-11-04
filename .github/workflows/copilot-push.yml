@@ -20,6 +20,9 @@ jobs:
   auto-commit:
     runs-on: ubuntu-latest
     
+    env:
+      OPENAI_API_KEY: ${{ secrets.MALAPI || secrets.MYAGENTRESEARCH_API }}
+    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
