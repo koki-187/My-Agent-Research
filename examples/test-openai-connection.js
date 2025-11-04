@@ -28,9 +28,10 @@ if (!apiKey.startsWith('sk-')) {
 }
 
 // キーの一部を隠して表示（セキュリティのため）
-const maskedKey = `${apiKey.substring(0, 7)}...${apiKey.substring(apiKey.length - 4)}`;
+const keyLength = apiKey.length;
+const maskedKey = `${apiKey.substring(0, 7)}...${apiKey.substring(keyLength - 4)}`;
 console.log(`✓ OPENAI_API_KEY is configured: ${maskedKey}`);
-console.log(`✓ Key length: ${apiKey.length} characters\n`);
+console.log(`✓ Key length: ${keyLength} characters\n`);
 
 console.log('=== Configuration Test Passed ===');
 console.log('The OPENAI_API_KEY environment variable is properly configured.\n');

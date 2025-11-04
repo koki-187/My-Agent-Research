@@ -14,6 +14,9 @@ on:
       - '.github/workflows/test-openai-config.yml'
       - 'package.json'
 
+permissions:
+  contents: read
+
 jobs:
   test-api-config:
     runs-on: ubuntu-latest
