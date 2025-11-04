@@ -1,0 +1,44 @@
+name: Example Auto Commit
+
+# このワークフローは例として、ファイルを自動的に作成・コミット・プッシュする方法を示しています
+# ChatGPT/Copilotから類似のパターンを使用できます
+
+on:
+  workflow_dispatch:
+    inputs:
+      file_name:
+        description: '作成するファイル名'
+        required: true
+        default: 'example.txt'
+      file_content:
+        description: 'ファイルの内容'
+        required: true
+        default: 'This is an example file created by GitHub Actions'
+
+permissions:
+  contents: write
+
+jobs:
+  create-and-commit:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+      
+      - name: Create example file
+        run: |
+          echo "${{ github.event.inputs.file_content }}" > "${{ github.event.inputs.file_name }}"
+      
+      - name: Commit and Push
+        run: |
+          git add "${{ github.event.inputs.file_name }}"
+          git commit -m "Add ${{ github.event.inputs.file_name }} via workflow"
+          git push origin ${{ github.ref_name }}

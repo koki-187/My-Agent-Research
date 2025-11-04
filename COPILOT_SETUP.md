@@ -39,6 +39,15 @@ ChatGPT（GitHub統合を持つバージョン）を使用する場合：
 1. リポジトリへの変更を行う
 2. Actions経由でコミット・プッシュを実行
 
+### 例示ワークフロー
+
+`.github/workflows/example-auto-commit.yml` には、ファイルを作成してコミット・プッシュする例が含まれています。
+このワークフローを参考に、独自の自動化を構築できます。
+
+## リポジトリ設定
+
+詳細なリポジトリ設定については、[REPOSITORY_SETTINGS.md](./REPOSITORY_SETTINGS.md) を参照してください。
+
 ## トラブルシューティング
 
 ### 権限エラー
