@@ -107,7 +107,7 @@ heroku config:set OPENAI_API_KEY=sk-your-openai-api-key-here
 ### 基本的な使用例
 
 ```javascript
-const OpenAI = require('openai').default;
+const { OpenAI } = require('openai');
 
 // process.env.OPENAI_API_KEY から自動的に読み込まれる
 const openai = new OpenAI({
