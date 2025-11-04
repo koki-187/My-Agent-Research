@@ -7,13 +7,17 @@ on:
   workflow_dispatch:
     inputs:
       file_name:
-        description: '作成するファイル名'
+        description: '作成するファイル名（ディレクトリパスは使用不可）'
         required: true
         default: 'example.txt'
       file_content:
         description: 'ファイルの内容'
         required: true
         default: 'This is an example file created by GitHub Actions'
+      branch:
+        description: 'Target branch'
+        required: false
+        default: 'main'
 
 permissions:
   contents: write
@@ -26,6 +30,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
+          ref: ${{ github.event.inputs.branch }}
           token: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Configure Git
@@ -33,12 +38,19 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
       
-      - name: Create example file
+      - name: Validate and create example file
         run: |
-          echo "${{ github.event.inputs.file_content }}" > "${{ github.event.inputs.file_name }}"
+          # ファイル名の検証（パストラバーサル攻撃を防ぐ）
+          FILE_NAME="${{ github.event.inputs.file_name }}"
+          if [[ "$FILE_NAME" == *"/"* ]] || [[ "$FILE_NAME" == *".."* ]]; then
+            echo "Error: Invalid file name. Directory paths are not allowed."
+            exit 1
+          fi
+          echo "${{ github.event.inputs.file_content }}" > "$FILE_NAME"
       
       - name: Commit and Push
         run: |
-          git add "${{ github.event.inputs.file_name }}"
-          git commit -m "Add ${{ github.event.inputs.file_name }} via workflow"
-          git push origin ${{ github.ref_name }}
+          FILE_NAME="${{ github.event.inputs.file_name }}"
+          git add "$FILE_NAME"
+          git commit -m "Add $FILE_NAME via workflow"
+          git push origin ${{ github.event.inputs.branch }}

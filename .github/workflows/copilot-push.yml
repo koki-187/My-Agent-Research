@@ -37,7 +37,9 @@ jobs:
           git add .
           if git diff --staged --quiet; then
             echo "No changes to commit"
+            echo "status=no-changes" >> $GITHUB_OUTPUT
           else
             git commit -m "${{ github.event.inputs.commit_message }}"
             git push origin ${{ github.event.inputs.branch }}
+            echo "status=success" >> $GITHUB_OUTPUT
           fi
