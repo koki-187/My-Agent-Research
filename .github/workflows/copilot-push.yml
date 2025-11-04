@@ -1,0 +1,43 @@
+name: Copilot Auto Push
+
+on:
+  workflow_dispatch:
+    inputs:
+      commit_message:
+        description: 'Commit message'
+        required: true
+        default: 'Update from ChatGPT/Copilot'
+      branch:
+        description: 'Target branch'
+        required: false
+        default: 'main'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  auto-commit:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+      
+      - name: Commit and Push changes
+        run: |
+          git add .
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "${{ github.event.inputs.commit_message }}"
+            git push origin ${{ github.event.inputs.branch }}
+          fi
